@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link href="{% static 'bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'login.css' %}" rel="stylesheet">
+</head>
+<body>
+<div class="{% if reg_flag != None %}cont s--signup{% else %}cont{% endif %}">
+    <div class="form sign-in">
+        <h2>Welcome back,</h2>
+        <form action="{% url 'validation' %}" method="post">
+            {% csrf_token %}
+            <label>
+                <span>Email</span>
+                <input type="email" name="email" {% if email != None %}
+                       value="{{ email }}"
+                {% else %}
+                    {% if reg_flag == None %}
+                       autofocus
+                    {% endif %}
+                {% endif %}/>
+            </label>
+            <label>
+                <span>Password</span>
+                <input type="password" name="password" {% if email != None and reg_flag == None %} autofocus
+                {% endif %}/>
+            </label>
+            {% if success != None %}
+                <label>
+                    <div class="alert alert-success" role="alert">
+                        register successfully. please login
+                    </div>
+                </label>
+            {% endif %}
+            {% if message != None %}
+                <label>
+                    <div class="alert alert-danger" role="alert">
+                        {{ message }}
+                    </div>
+                </label>
+            {% endif %}
+            <label>
+                <a class="forgot-pass" href="#">Forgot password?</a>
+            </label>
+            <button class="submit">Sign In</button>
+            <button class="fb-btn">Connect with <span>facebook</span></button>
+        </form>
+    </div>
+    <div class="sub-cont">
+        <div class="img">
+            <div class="img__text m--up">
+                <h2>New here?</h2>
+                <p>Sign up and discover great restaurants in Pittsburgh!</p>
+            </div>
+            <div class="img__text m--in">
+                <h2>One of us?</h2>
+                <p>If you already has an account, just sign in. We've missed you!</p>
+            </div>
+            <div class="img__btn">
+                <span class="m--up">Sign Up</span>
+                <span class="m--in">Sign In</span>
+            </div>
+        </div>
+        <div class="form sign-up">
+            <h2>Time to feel like home,</h2>
+            <form action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                <label>
+                    <span>Name</span>
+                    <input type="text" name="reg-name"/>
+                </label>
+                <label>
+                    <span>Email</span>
+                    <input type="email" name="reg-email"/>
+                </label>
+                <label>
+                    <span>Password</span>
+                    <input type="password" name="reg-password"/>
+                </label>
+                {% if reg_message != None %}
+                    <label>
+                        <div class="alert alert-danger" role="alert">
+                            {{ reg_message }}
+                        </div>
+                    </label>
+                {% endif %}
+                <button class="submit">Sign Up</button>
+            </form>
+            <button type="button" class="fb-btn">Join with <span>facebook</span></button>
+        </div>
+    </div>
+</div>
+
+<script id="rendered-js">
+    document.querySelector('.img__btn').addEventListener('click', function () {
+        document.querySelector('.cont').classList.toggle('s--signup');
+    });
+    //# sourceURL=pen.js
+</script>
+</body>
+</html>

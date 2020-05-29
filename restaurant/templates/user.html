@@ -1,0 +1,258 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Homepage</title>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap.min.css' %}" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /*@media (min-width: 768px) {*/
+        /*.bd-placeholder-img-lg {*/
+        /*font-size: 3.5rem;*/
+        /*}*/
+        /*}*/
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="{% static 'bootstrap-slider.css' %}" rel="stylesheet">
+    <link href="{% static 'pricing.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'demo.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'style3.css' %}"/>
+    <link href="{% static 'blog.css' %}" rel="stylesheet">
+    <script>document.documentElement.className = 'js';</script>
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">YUMMY·PITT</h5>
+    <nav class="navbar navbar-expand-lg navbar-light my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="{% url 'home' %}">Home</a>
+        <a class="p-2 text-dark" href="{% url 'top' %}">Top</a>
+        <a class="p-2 text-dark" href="{% url 'map' %}">Map</a>
+        <a class="p-2 text-dark" href="{% url 'visualize' %}">Client - Location Analysis</a>
+    </nav>
+    {% if username != None %}
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+            {{ username }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Personal Information</a>
+            <a class="dropdown-item" href="{% url 'usrshow' user_id %}">Personal Show</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+        </div>
+    {% else %}
+        <a class="btn btn-outline-primary" href="{% url 'login' %}">Sign in</a>
+    {% endif %}
+
+</div>
+
+<form action="{% url 'userinfo' %}" method="post">
+    {% csrf_token %}
+    <label>
+        <span>Name</span>
+        <input type="text" name="reg-name" value="{{ username }}"/>
+    </label>
+    <label>
+        <span>Email</span>
+        <input type="email" name="reg-email" value="{{ email }}"/>
+    </label>
+    <label>
+        <span>Password</span>
+        <input type="text" name="reg-password" value="{{ password }}"/>
+    </label>
+    {% if error != None %}
+        <label>
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        </label>
+    {% endif %}
+    <button class="submit">Changeinfo</button>
+</form>
+<details>
+    <summary>Review History:</summary>
+
+    <div class="container">
+        <p></p>
+        <h4>Recent Reviews</h4>
+        <hr/>
+
+        {% for review in reviews %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid"/>
+                            <p class="text-secondary text-center">{{ review.review_date }}</p>
+                        </div>
+                        <div class="col-md-10">
+                            <p>
+                                <a class="float-left"
+                                   href="{% url 'detail' review.business_id.business_id %}">{{ review.business_id.name }}</a>
+                                {#                                <span class="float-right"><i class="text-warning fa fa-star-half"></i></span>#}
+                                {#                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>#}
+                                {#                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>#}
+                                {#                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>#}
+                                {% if review.stars == 0.5 %}
+                                    <span class="float-right"><i class="text-warning fa fa-star-half"></i></span>
+                                {% elif review.stars == 1 %}
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                {% elif review.stars == 1.5 %}
+                                    <span class="float-right"><i class="text-warning fa fa-star-half"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                {% elif review.stars == 2 %}
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                {% elif review.stars == 2.5 %}
+                                    <span class="float-right"><i class="text-warning fa fa-star-half"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                {% elif review.stars == 3 %}
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                {% elif review.stars == 3.5 %}
+                                    <span class="float-right"><i class="text-warning fa fa-star-half"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                {% elif review.stars == 4 %}
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                {% elif review.stars == 4.5 %}
+                                    <span class="float-right"><i class="text-warning fa fa-star-half"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                {% elif review.stars == 5 %}
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                {% endif %}
+
+                            </p>
+                            <div class="clearfix"></div>
+                            <p>{{ review.text }}</p>
+                            <p>
+                                <a class="float-right btn btn-outline-primary ml-2"> <i class="fa fa-bomb"></i>
+                                    Dislike({{ review.negative_votes }})</a>
+                                <a class="float-right btn text-white btn-danger ml-2"> <i class="fa fa-heart"></i>
+                                    Like({{ review.positive_votes }})</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p></p>
+        {% endfor %}
+
+    </div>
+</details>
+
+<details>
+    <summary>Collections:</summary>
+    {% for collection in collections %}
+        <div class="row mb-2">
+            <div class="col-xl-12">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-primary">
+                            {% for category in collection.business_id.categories_set.all %}
+                                {% if forloop.last %}
+                                    {{ category.categories }}
+                                {% else %}
+                                    {{ category.categories }},&nbsp;
+                                {% endif %}
+                            {% endfor %}
+                        </strong>
+                        <h3 class="mb-0">{{ collection.business_id.name }}</h3>
+                        <div class="mb-1 text-muted">
+                            {% if collection.business_id.attributes.RestaurantsTakeOut == 1 %}
+                                #TakeOut&nbsp;
+                            {% endif %}
+                            {% if collection.business_id.attributes.RestaurantsDelivery == 1 %}
+                                #Delivery&nbsp;
+                            {% endif %}
+                            {% if collection.business_id.attributes.RestaurantsReservations == 1 %}
+                                #Reservations&nbsp;
+                            {% endif %}
+                            {% if collection.business_id.attributes.RestaurantsGoodForGroups == 1 %}
+                                #GoodForGroups&nbsp;
+                            {% endif %}
+                            {% if collection.business_id.attributes.OutdoorSeating == 1 %}
+                                #OutdoorSeating&nbsp;
+                            {% endif %}
+                            {% if collection.business_id.attributes.GoodForKids == 1 %}
+                                #GoodForKids&nbsp;
+                            {% endif %}
+                            {% if collection.business_id.attributes.HasTV == 1 %}
+                                #TV&nbsp;
+                            {% endif %}
+                            {% if collection.business_id.attributes.WiFi == 1 %}
+                                #WiFi&nbsp;
+                            {% endif %}
+                            {% if collection.business_id.attributes.BikeParking == 1 %}
+                                #BikeParking&nbsp;
+                            {% endif %}
+                        </div>
+                        <div class="mb-1 text-muted">{{ collection.business_id.stars }} stars
+                            - {{ collection.business_id.review_count }}
+                            reviews
+                        </div>
+                        <div class="mb-1 text-muted">
+                            {% if collection.business_id.attributes.RestaurantsPriceRange2 == 3 %}
+                                $$$
+                            {% elif collection.business_id.attributes.RestaurantsPriceRange2 == 2 %}
+                                $$
+                            {% else %}
+                                $
+                            {% endif %}
+                        </div>
+                        <p class="card-text mb-auto">Address: {{ collection.business_id.address }}
+                            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zip Code: {{ collection.business_id.postal_code }}</span>
+                        </p>
+                        <a href="/restaurant/detail/{{ collection.business_id.business_id }}"
+                           class="stretched-link"></a>
+                    </div>
+                    <div class="col-auto d-none d-lg-block">
+                        <img src="{% static 'images/thrones.jpg' %}" alt="" width="528" height="250">
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</details>
+{% block content %}
+{% endblock %}
+
+<script src="{% static 'demo3.js' %}"></script>
+<script src="{% static 'jquery.slim.min.js' %}"></script>
+<script src="{% static 'popper.min.js' %}"></script>
+<script src="{% static 'bootstrap.min.js' %}"></script>
+<script src="{% static 'bootstrap-slider.js' %}"></script>
+
+</body>
+</html>

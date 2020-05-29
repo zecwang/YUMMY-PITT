@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}
+    <main class="main-wrap">
+        <header class="codrops-header">
+            <div class="codrops-links">
+                <a class="codrops-icon codrops-icon--prev" href="javascript:history.go(-1)"
+                   title="Previous Demo">
+                    <svg class="icon icon--arrow">
+                        <use xlink:href="#icon-arrow"></use>
+                    </svg>
+                </a>
+                <a class="codrops-icon codrops-icon--drop" href="#"
+                   title="Back to the article">
+                    <svg class="icon icon--drop">
+                        <use xlink:href="#icon-drop"></use>
+                    </svg>
+                </a>
+            </div>
+            <h6 class="my-0 mr-md-auto font-weight-normal">{{ activity }}&nbsp;{ 'star': {{ star }},
+                'category': {{ selected_category }}, 'price': {% if selected_price == 3 %}$$$
+                {% elif selected_price == 2 %}$$
+                {% elif selected_price == 1 %}$
+                {% endif %} }</h6>
+            <div class="search-wrap">
+                <button id="btn-search" class="btn btn--search" onclick="document.searchForm.search.focus();">
+                    <svg class="icon icon--search">
+                        <use xlink:href="#icon-search"></use>
+                    </svg>
+                </button>
+            </div>
+        </header>
+        <div class="container-fluid col-xl-8">
+
+            {% for restaurant in restaurants %}
+                <div class="row mb-2">
+                    <div class="col-xl-12">
+                        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <div class="col p-4 d-flex flex-column position-static">
+                                <strong class="d-inline-block mb-2 text-primary">
+                                    {% for category in restaurant.categories_set.all %}
+                                        {% if forloop.last %}
+                                            {{ category.categories }}
+                                        {% else %}
+                                            {{ category.categories }},&nbsp;
+                                        {% endif %}
+                                    {% endfor %}
+                                </strong>
+                                <h3 class="mb-0">{{ restaurant.name }}</h3>
+                                <div class="mb-1 text-muted">
+                                    {% if restaurant.attributes.RestaurantsTakeOut == 1 %}
+                                        #TakeOut&nbsp;
+                                    {% endif %}
+                                    {% if restaurant.attributes.RestaurantsDelivery == 1 %}
+                                        #Delivery&nbsp;
+                                    {% endif %}
+                                    {% if restaurant.attributes.RestaurantsReservations == 1 %}
+                                        #Reservations&nbsp;
+                                    {% endif %}
+                                    {% if restaurant.attributes.RestaurantsGoodForGroups == 1 %}
+                                        #GoodForGroups&nbsp;
+                                    {% endif %}
+                                    {% if restaurant.attributes.OutdoorSeating == 1 %}
+                                        #OutdoorSeating&nbsp;
+                                    {% endif %}
+                                    {% if restaurant.attributes.GoodForKids == 1 %}
+                                        #GoodForKids&nbsp;
+                                    {% endif %}
+                                    {% if restaurant.attributes.HasTV == 1 %}
+                                        #TV&nbsp;
+                                    {% endif %}
+                                    {% if restaurant.attributes.WiFi == 1 %}
+                                        #WiFi&nbsp;
+                                    {% endif %}
+                                    {% if restaurant.attributes.BikeParking == 1 %}
+                                        #BikeParking&nbsp;
+                                    {% endif %}
+                                </div>
+                                <div class="mb-1 text-muted">{{ restaurant.stars }} stars
+                                    - {{ restaurant.review_count }}
+                                    reviews
+                                </div>
+                                <div class="mb-1 text-muted">{% if restaurant.attributes.RestaurantsPriceRange2 == 3 %}
+                                    $$$
+                                {% elif restaurant.attributes.RestaurantsPriceRange2 == 2 %}
+                                    $$
+                                {% else %}
+                                    $
+                                {% endif %}
+                                </div>
+                                <p class="card-text mb-auto">Address: {{ restaurant.address }}
+                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zip Code: {{ restaurant.postal_code }}</span>
+                                </p>
+                                <a href="{% url 'detail' restaurant.business_id %}" class="stretched-link"></a>
+                            </div>
+                            <div class="col-auto d-none d-lg-block">
+                                <img src="{% static 'images/thrones.jpg' %}" alt="" width="528" height="250">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <footer class="container-fluid">
+            <div class="col-xs-12">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        {% if items == 2 %}
+                            <li class="page-item"><a class="page-link" href="{% url 'search2' 2 %}">2</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="{% url 'search2' 2 %}">Next</a>
+                            </li>
+                        {% elif items == 3 %}
+                            <li class="page-item"><a class="page-link" href="{% url 'search2' 2 %}">2</a></li>
+                            <li class="page-item"><a class="page-link" href="{% url 'search2' 3 %}">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="{% url 'search2' 2 %}">Next</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            <div class="blog-footer">
+                <p>Group Project &copy; Copyright</p>
+                <p>
+                    <a href="#">Back to top</a>
+            </div>
+        </footer>
+    </main>
+{% endblock %}
